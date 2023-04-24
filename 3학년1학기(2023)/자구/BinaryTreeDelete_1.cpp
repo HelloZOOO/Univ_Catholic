@@ -40,8 +40,6 @@ BinarySearchTree Insert(ElementType X, BinarySearchTree T) {
     // 트리가 비어있다면 트리를 생성시킨다
     if (T == NULL) 
     {
-        
-        return CreateTree(X); //트리 생성
         T = (BinarySearchTree)malloc(sizeof(struct TreeNode));
         T->Element = X;
 		T->Left = NULL;
