@@ -39,8 +39,12 @@ BinarySearchTree Insert(ElementType X, BinarySearchTree T) {
     
     // 트리가 비어있다면 트리를 생성시킨다
     if (T == NULL) 
+    {
         return CreateTree(X); //트리 생성
-    
+        T->Element = X;
+		T->Left = NULL;
+		T->Right = NULL;
+    }
     // x보다 트리의 원소가 클 경우 Left로 이동한 후 함수를 실행시킵니다
     else if (X< T->Element) 
         T->Left = Insert(X, T->Left);
