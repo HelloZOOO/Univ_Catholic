@@ -104,8 +104,8 @@ int CheckIdx(int Index, Queue Q) {
     //++Indxex가 곧 Rear이다
     if (++Index == Q->Capacity) { //?if문 안에서도 일단 인덱스가 증가하는건가?
 		Index = 0; //인덱스는 배열의 첫번째로 돌아갑니다
-	//todo if문 내용이 거짓이더라도 ++Index는 작동하여
-	//todo Index Input값이 3이고 Capacity가 10이라면 리턴값은 4입니다.        
+	//~ if문 내용이 거짓이더라도 ++Index는 작동하여
+	//~ Index Input값이 3이고 Capacity가 10이라면 리턴값은 4입니다.        
     }
     return Index; //첫번째 배열을 반환합니다
 }
