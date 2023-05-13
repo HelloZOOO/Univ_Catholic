@@ -163,6 +163,40 @@ BinarySearchTree Delete(ElementType X, BinarySearchTree T)
     return T;
 }
 
+//! 0502실습내용 출력 함수 3가지
+//1 - 부모 노드 먼저 출력하고 자식노드 출력함
+// ~ 중 좌 우
+void PreOrder(BinarySearchTree T)
+{
+    if(T!=NULL){
+        printf("%d", T->Element); // 부모 노드 출력 후 (자기 자신을 프린트 이 뜻은 부모노드가 첫번째라 부모노드부터 출력한다는것)
+        PreOrder(T->Left); // 왼쪽으로 이동
+        PreOrder(T->Right); // 그 다음 오른쪽으로 이동
+    }
+}
+
+//2 - 자식노드 왼쪽을 가장 최우선으로 하고 오른쪽자식 탐색하고 루트인 부모노드를 탐색하는 방법
+// ~ 좌 우 중
+void PostOrder(BinarySearchTree T)
+{
+    if(T!=NULL){
+        PostOrder(T->Left); // 왼쪽 작은값으로 이동하고
+        PostOrder(T->Right); // 오른쪽 큰값으로 이동
+        printf("%d ", T->Element); //현재 위치한 요소값을 출력
+    }
+}
+
+//3 - 자식(왼쪽먼저) 그다음 루트 그다음 우측노드
+// ~ 좌 중 우
+void InOrder(BinarySearchTree T)
+{
+    if(T!=NULL){
+        InOrder(T->Left);
+        printf("%d ", T->Element);
+        InOrder(T->Right);
+    }
+}
+
 // 메인 함수
 int main() {
 
