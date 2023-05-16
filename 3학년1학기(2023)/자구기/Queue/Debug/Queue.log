@@ -1,5 +1,10 @@
 ﻿  Queue.cpp
-C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(20,55): error C2440: '초기화 중': 'void *'에서 'Node *'(으)로 변환할 수 없습니다.
-C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(20,26): message : 'void*'에서 'void'가 아닌 포인터로 변환하려면 명시적 캐스트가 필요합니다.
-C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(60,9): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(65,13): error C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(137,21): warning C4473: 'scanf_s': 서식 문자열에 대한 인수가 충분하게 전달되지 않았습니다.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(137,21): message : 자리 표시자 및 해당 매개 변수에는 variadic 인수가 2개 필요하지만 1개가 제공되었습니다.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(137,21): message : 누락된 variadic 인수 2이(가) 서식 문자열 '%c'에 필요합니다.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(137,21): message : 이 인수는 버퍼 크기로 사용됩니다.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(141,25): warning C4473: 'scanf_s': 서식 문자열에 대한 인수가 충분하게 전달되지 않았습니다.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(141,25): message : 자리 표시자 및 해당 매개 변수에는 variadic 인수가 2개 필요하지만 1개가 제공되었습니다.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(141,25): message : 누락된 variadic 인수 2이(가) 서식 문자열 '%c'에 필요합니다.
+C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Queue.cpp(141,25): message : 이 인수는 버퍼 크기로 사용됩니다.
+  Queue.vcxproj -> C:\SBU\Univ_Catholic\3학년1학기(2023)\자구기\Queue\Debug\Queue.exe
