@@ -8,6 +8,7 @@ struct VE;
 
 typedef struct Node* AdjListNode; //노드의 포인터에 해당하는 AdjListNode
 typedef AdjListNode *Head; // 노드의 포인터AdjListNode의 포인터 typedef struct Node **Head
+typedef AdjListNode *Head; // 노드의 포인터AdjListNode의 포인터 typedef struct Node **Head
 typedef struct VE* Graph;
 //~ AdjListNode는 Node의 더블 포인터 (typedef Node** Head;)
 
