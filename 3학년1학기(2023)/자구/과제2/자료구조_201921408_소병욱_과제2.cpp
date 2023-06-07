@@ -40,6 +40,9 @@ Graph CreateGraph(int V); // 2.그래프 생성
 void AddEdge(Graph G, int u, int v); // 3.엣지 추가
 void AddEdge_Undirected(Graph G, int u, int v); // 4.무방향 그래프 엣지 추가
 void PrintGraph(Graph G); // 5.그래프 출력
+void DFSUtil(Graph G, int startNode, int visited[]); // 6.그래프 DFS 핵심기능 구현
+void DFS(Graph G, int startNode); // 7.그래프 DFS 간소화된 인터페이스 제공
+
 
 // ! 1.노드 생성
 //노드의 포인트에 해당하는 newNode
@@ -88,6 +91,7 @@ Graph CreateGraph(int V) {
 // ! 3.엣지 추가
 //어떤 그래프를 고를거냐? 출발지에 해당하는 인덱스 u와 목적지에 해당하는 인덱스 v 
 void AddEdge(Graph G, int u, int v) {
+    
     AdjListNode newNode; //새로운 노드 선언
     newNode = NewNode(v); // 목적지인 v노드는 새로운 노드다.
 
@@ -122,12 +126,113 @@ void PrintGraph(Graph G) {
     }
 }
 
+// ! 6.그래프 DFS 기능 출력
+// ~ 깊이 우선 검색(DFS) 알고리즘의 핵심 구현입니다. 주어진 노드에서 시작하여 DFS 순회를 수행합니다. 
+void DFSUtil(Graph G, int startNode, int visited[]) {
+    visited[startNode] = 1; // 현재 노드를 방문한 것으로 표시
+    printf("%d -> ", startNode);
 
+    AdjListNode currentNode = G->Adj[startNode]->Next; // 현재 노드의 첫 번째 인접 노드를 가져옴
+
+    // 특정한 순서로 인접한 노드를 저장하기 위한 배열 생성
+    AdjListNode* adjacentNodes = (AdjListNode*)malloc(G->V * sizeof(AdjListNode));
+    int numAdjacentNodes = 0;
+
+    while (currentNode) {
+        if (visited[currentNode->NodeNum] == 0) { // 인접한 노드가 방문되지 않은 경우
+            adjacentNodes[numAdjacentNodes++] = G->Adj[currentNode->NodeNum]; // 인접한 노드를 배열에 저장
+            visited[currentNode->NodeNum] = 1; // 인접한 노드를 방문한 것으로 표시
+        }
+        currentNode = currentNode->Next; // 다음 인접한 노드로 이동
+    }
+
+    // 노드 번호를 기준으로 오름차순으로 인접한 노드 정렬
+    for (int i = 0; i < numAdjacentNodes - 1; i++) {
+        for (int j = i + 1; j < numAdjacentNodes; j++) {
+            if (adjacentNodes[i]->NodeNum > adjacentNodes[j]->NodeNum) {
+                AdjListNode temp = adjacentNodes[i];
+                adjacentNodes[i] = adjacentNodes[j];
+                adjacentNodes[j] = temp;
+            }
+        }
+    }
+
+    // 정렬된 순서로 인접한 노드를 재귀적으로 방문
+    for (int i = 0; i < numAdjacentNodes; i++) {
+        DFSUtil(G, adjacentNodes[i]->NodeNum, visited);
+    }
+
+    free(adjacentNodes); // 배열에 할당된 메모리 해제
+}
+
+// ! 7.그래프 DFS
+// ~ 그래프에서 DFS 순회를 수행하기 위한 간소화된 인터페이스를 제공
+void DFS(Graph G, int startNode) {
+    printf("\nDFS result: ");
+    int V = G->V; // 그래프의 전체 노드 수
+    int *visited = (int *)malloc(V * sizeof(int)); // 방문한 노드를 추적하기 위한 배열 생성
+
+    for (int i = 0; i < V; i++) {
+        visited[i] = 0; // 모든 노드를 방문하지 않은 것으로 초기화
+    }
+
+    DFSUtil(G, startNode, visited); // DFSUtil 함수를 호출하여 DFS 탐색 실행
+
+    free(visited); // 방문 배열에 할당된 메모리 해제
+    printf("NULL\n");
+}
+
+// ! 8.그래프 BFS 기능 출력
+void BFS(Graph G, int startNode) {
+    int V = G->V;
+    int* visited = (int*)malloc(V * sizeof(int));
+    for (int i = 0; i < V; i++) {
+        visited[i] = 0;
+    }
+    
+    // Create a queue for BFS
+    int* queue = (int*)malloc(V * sizeof(int));
+    int front = 0, rear = 0;
+    
+    // Enqueue the start node and mark it as visited
+    queue[rear++] = startNode;
+    visited[startNode] = 1;
+    
+    printf("BFS result: ");
+    
+    while (front != rear) {
+        // Dequeue a node from the queue
+        int currentNode = queue[front++];
+        printf("%d -> ", currentNode);
+        
+        AdjListNode adjacentNode = G->Adj[currentNode]->Next;
+        while (adjacentNode) {
+            if (visited[adjacentNode->NodeNum] == 0) {
+                // Enqueue the adjacent node and mark it as visited
+                queue[rear++] = adjacentNode->NodeNum;
+                visited[adjacentNode->NodeNum] = 1;
+            }
+            adjacentNode = adjacentNode->Next;
+        }
+    }
+    
+    printf("NULL\n");
+    
+    free(visited);
+    free(queue);
+}
+
+
+
+
+// ! 메인함수
 int main() {
 
+    //! 그래프 생성
     Graph G;
     G = CreateGraph(10); // 노드 9개짜리 무방향 그래프 생성
 
+    //! 엣지 생성
     // 방향 엣지로 하나하나 추가
     AddEdge(G, 1, 2);
     AddEdge(G, 1, 4);
@@ -162,9 +267,14 @@ int main() {
     // 8 -> 2 -> 6 -> 9 -> NULL
     // 9 -> 7 -> 8 -> NULL
 
-    printf("\nDFS traversal from node 5:\n");
+    //! DFS
     DFS(G, 5);
-    printf("NULL\n");
+    //5 -> 2 -> 1 -> 4 -> 3 -> 6 -> 8 -> 9 -> 7 -> NULL
+    //5 2 1 4 3 6 8 9 7
+    BFS(G, 5);
+    //5 -> 2 -> 7 -> 1 -> 8 -> 9 -> 4 -> 6 -> 3 -> NULL
+    //5 2 7 1 8 9 4 6 3
+
 
     return 0;
 }
