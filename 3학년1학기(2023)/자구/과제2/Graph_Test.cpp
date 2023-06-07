@@ -119,7 +119,7 @@ void PrintGraph(Graph G1) {
         Tmp = G1->Adj[i]; // 시작 노드
         // 다음 노드가 있을 때까지
     while (Tmp) {
-        printf("%d -> ", Tmp->NodeNum);
+        printf("%d -> ", Tmp->NodeNum+1);
          Tmp = Tmp->Next; // 다음 노드로
         }
     printf("NULL\n");
@@ -130,7 +130,7 @@ void PrintGraph(Graph G1) {
 // ~ 깊이 우선 검색(DFS) 알고리즘의 핵심 구현입니다. 주어진 노드에서 시작하여 DFS 순회를 수행합니다. 
 void DFSUtil(Graph G1, int startNode, int visited[]) {
     visited[startNode] = 1; // 현재 노드를 방문한 것으로 표시
-    printf("%d -> ", startNode);
+    printf("%d -> ", startNode+1);
 
     AdjListNode currentNode = G1->Adj[startNode]->Next; // 현재 노드의 첫 번째 인접 노드를 가져옴
 
@@ -184,112 +184,124 @@ void DFS(Graph G1, int startNode) {
 
 // ! 8.그래프 BFS 기능 출력
 void BFS(Graph G1, int startNode) {
-int V = G1->V;
-int* visited = (int*)malloc(V * sizeof(int));
-for (int i = 0; i < V; i++) {
-visited[i] = 0;
-}
-
-// Create a queue for BFS
-int* queue = (int*)malloc(V * sizeof(int));
-int front = 0, rear = 0;
-
-// Enqueue the start node and mark it as visited
-queue[rear++] = startNode;
-visited[startNode] = 1;
-
-printf("BFS result: ");
-
-while (front != rear) {
-// Dequeue a node from the queue
-int currentNode = queue[front++];
-printf("%d -> ", currentNode);
-
-// Sort the adjacent nodes in ascending order
-AdjListNode adjacentNode = G1->Adj[currentNode];
-AdjListNode prev = NULL;
-while (adjacentNode) {
-    AdjListNode next = adjacentNode->Next;
-    if (prev == NULL) {
-    prev = adjacentNode;
-    } else if (adjacentNode->NodeNum < prev->NodeNum) {
-    // Swap the nodes
-    int temp = prev->NodeNum;
-    prev->NodeNum = adjacentNode->NodeNum;
-    adjacentNode->NodeNum = temp;
+    int V = G1->V;
+    int* visited = (int*)malloc(V * sizeof(int));
+    for (int i = 0; i < V; i++) {
+        visited[i] = 0;
     }
-    adjacentNode = next;
-}
-
-// Iterate over the sorted adjacent nodes
-adjacentNode = G1->Adj[currentNode];
-while (adjacentNode) {
-    if (visited[adjacentNode->NodeNum] == 0) {
-    // Enqueue the adjacent node and mark it as visited
-    queue[rear++] = adjacentNode->NodeNum;
-    visited[adjacentNode->NodeNum] = 1;
+    
+    // Create a queue for BFS
+    int* queue = (int*)malloc(V * sizeof(int));
+    int front = 0, rear = 0;
+    
+    // Enqueue the start node and mark it as visited
+    queue[rear++] = startNode;
+    visited[startNode] = 1;
+    
+    printf("BFS result: ");
+    
+    while (front != rear) {
+        // Dequeue a node from the queue
+        int currentNode = queue[front++];
+        printf("%d -> ", currentNode+1);
+        
+        AdjListNode adjacentNode = G1->Adj[currentNode]->Next;
+        while (adjacentNode) {
+            if (visited[adjacentNode->NodeNum] == 0) {
+                // Enqueue the adjacent node and mark it as visited
+                queue[rear++] = adjacentNode->NodeNum;
+                visited[adjacentNode->NodeNum] = 1;
+            }
+            adjacentNode = adjacentNode->Next;
+        }
     }
-    adjacentNode = adjacentNode->Next;
-}
+    
+    printf("NULL\n");
+    
+    free(visited);
+    free(queue);
 }
 
-printf("NULL\n");
 
-free(visited);
-free(queue);
-}
+
 
 // ! 메인함수
 int main() {
 
     //! 그래프 생성
     Graph G1;
-    G1 = CreateGraph(10); // 노드 9개짜리 무방향 그래프 생성
+    G1 = CreateGraph(9); // 노드 9개짜리 무방향 그래프 생성
 
     //! 엣지 생성
     // 방향 엣지로 하나하나 추가
-    AddEdge(G1, 1, 2);
-    AddEdge(G1, 1, 4);
-    AddEdge(G1, 1, 6);
-    AddEdge(G1, 2, 1);
-    AddEdge(G1, 2, 5);
-    AddEdge(G1, 2, 8);
-    AddEdge(G1, 3, 4);
-    AddEdge(G1, 4, 1);
-    AddEdge(G1, 4, 3);
-    AddEdge(G1, 5, 2);
-    AddEdge(G1, 5, 7);
-    AddEdge(G1, 6, 1);
-    AddEdge(G1, 6, 8);
-    AddEdge(G1, 7, 5);
-    AddEdge(G1, 7, 9);
-    AddEdge(G1, 8, 2);
-    AddEdge(G1, 8, 6);
-    AddEdge(G1, 8, 9);
-    AddEdge(G1, 9, 7);
-    AddEdge(G1, 9, 8);
+    AddEdge(G1, 0, 1); //1 -> 2
+    AddEdge(G1, 0, 3); //1 -> 4
+    AddEdge(G1, 0, 5); //1 -> 6
+    AddEdge(G1, 1, 0); //2 -> 1
+    AddEdge(G1, 1, 4); //2 -> 5
+    AddEdge(G1, 1, 7); //2 -> 8
+    AddEdge(G1, 2, 3); //3 -> 4
+    AddEdge(G1, 3, 0); //4 -> 1
+    AddEdge(G1, 3, 2); //4 -> 3
+    AddEdge(G1, 4, 1); //5 -> 2
+    AddEdge(G1, 4, 6); //5 -> 7
+    AddEdge(G1, 5, 0); //6 -> 1
+    AddEdge(G1, 5, 7); //6 -> 8
+    AddEdge(G1, 6, 4); //7 -> 5
+    AddEdge(G1, 6, 8); //7 -> 9
+    AddEdge(G1, 7, 1); //8 -> 2
+    AddEdge(G1, 7, 5); //8 -> 6
+    AddEdge(G1, 7, 8); //8 -> 9
+    AddEdge(G1, 8, 6); //9 -> 7
+    AddEdge(G1, 8, 7); //9 -> 8
     PrintGraph(G1);
-    
-    // 1 -> 2 -> 4 -> 6 -> NULL
-    // 2 -> 1 -> 5 -> 8 -> NULL
-    // 3 -> 4 -> NULL
-    // 4 -> 1 -> 3 -> NULL
-    // 5 -> 2 -> 7 -> NULL
-    // 6 -> 1 -> 8 -> NULL
-    // 7 -> 5 -> 9 -> NULL
-    // 8 -> 2 -> 6 -> 9 -> NULL
-    // 9 -> 7 -> 8 -> NULL
 
     //! DFS
-    DFS(G1, 5);
+    DFS(G1, 4); //노드 5부터 시작
     //5 -> 2 -> 1 -> 4 -> 3 -> 6 -> 8 -> 9 -> 7 -> NULL
-    //5 2 1 4 3 6 8 9 7
     //! BFS
-    BFS(G1, 5);
+    BFS(G1, 4); //노드 5부터 시작
     //5 -> 2 -> 7 -> 1 -> 8 -> 9 -> 4 -> 6 -> 3 -> NULL
-    //5 2 7 1 8 9 4 6 3
+    
+    printf("================================================================\n\n");
+    // * =================================================================
+    // * 무방향 그래프 구현
+    // * =================================================================
+    printf("================================================================\n\n");
+
+    //! 그래프 생성
+    Graph G2;
+    G2 = CreateGraph(9); // 노드 9개짜리 무방향 그래프 생성
+
+    //! 엣지 생성
+    // 방향 엣지로 하나하나 추가
+    AddEdge_Undirected(G2, 0, 1);
+    AddEdge_Undirected(G2, 0, 3);
+    AddEdge_Undirected(G2, 0, 5);
+    AddEdge_Undirected(G2, 1, 4);
+    AddEdge_Undirected(G2, 1, 7);
+    AddEdge_Undirected(G2, 2, 3);
+    AddEdge_Undirected(G2, 4, 6);
+    AddEdge_Undirected(G2, 5, 7);
+    AddEdge_Undirected(G2, 6, 8);
+    AddEdge_Undirected(G2, 7, 8);
+    PrintGraph(G2);
+    //! DFS
+    DFS(G2, 4);
+    //5 -> 2 -> 1 -> 4 -> 3 -> 6 -> 8 -> 9 -> 7 -> NULL
+    //! BFS
+    BFS(G2, 4);
+    //5 -> 2 -> 7 -> 1 -> 8 -> 9 -> 4 -> 6 -> 3 -> NULL
 
     return 0;
 }
 
-
+// 1 -> 2 -> 4 -> 6 -> NULL
+// 2 -> 1 -> 5 -> 8 -> NULL
+// 3 -> 4 -> NULL
+// 4 -> 1 -> 3 -> NULL
+// 5 -> 2 -> 7 -> NULL
+// 6 -> 1 -> 8 -> NULL
+// 7 -> 5 -> 9 -> NULL
+// 8 -> 2 -> 6 -> 9 -> NULL
+// 9 -> 7 -> 8 -> NULL
