@@ -182,56 +182,56 @@ void DFS(Graph G1, int startNode) {
     printf("NULL\n");
 }
 
-// ! 8.그래프 BFS 기능 출력
+// ! 8. 그래프 BFS 기능 출력
 void BFS(Graph G1, int startNode) {
-int V = G1->V;
-int* visited = (int*)malloc(V * sizeof(int));
-for (int i = 0; i < V; i++) {
-visited[i] = 0;
-}
-
-// Create a queue for BFS
-int* queue = (int*)malloc(V * sizeof(int));
-int front = 0, rear = 0;
-
-// Enqueue the start node and mark it as visited
-queue[rear++] = startNode;
-visited[startNode] = 1;
-
-printf("BFS result: ");
-
-while (front != rear) {
-// Dequeue a node from the queue
-int currentNode = queue[front++];
-printf("%d -> ", currentNode);
-
-// Sort the adjacent nodes in ascending order
-AdjListNode adjacentNode = G1->Adj[currentNode];
-AdjListNode prev = NULL;
-while (adjacentNode) {
-    AdjListNode next = adjacentNode->Next;
-    if (prev == NULL) {
-    prev = adjacentNode;
-    } else if (adjacentNode->NodeNum < prev->NodeNum) {
-    // Swap the nodes
-    int temp = prev->NodeNum;
-    prev->NodeNum = adjacentNode->NodeNum;
-    adjacentNode->NodeNum = temp;
+    int V = G1->V;  // 그래프의 정점 개수
+    int* visited = (int*)malloc(V * sizeof(int));  // 방문 여부를 저장할 배열 동적 할당
+    for (int i = 0; i < V; i++) {
+        visited[i] = 0;  // 모든 정점의 방문 여부를 초기화
     }
-    adjacentNode = next;
-}
 
-// Iterate over the sorted adjacent nodes
-adjacentNode = G1->Adj[currentNode];
-while (adjacentNode) {
-    if (visited[adjacentNode->NodeNum] == 0) {
-    // Enqueue the adjacent node and mark it as visited
-    queue[rear++] = adjacentNode->NodeNum;
-    visited[adjacentNode->NodeNum] = 1;
+    // BFS를 위한 큐 생성
+    int* queue = (int*)malloc(V * sizeof(int));  // 큐를 배열로 구현
+    int front = 0, rear = 0;  // 큐의 시작(front)과 끝(rear)을 초기화
+
+    // 시작 노드를 큐에 넣고 방문 표시
+    queue[rear++] = startNode;  // 시작 노드를 큐에 삽입
+    visited[startNode] = 1;  // 시작 노드를 방문 표시
+
+    printf("BFS result: ");
+
+    while (front != rear) {  // 큐가 비어있지 않은 동안 반복
+        // 큐에서 노드 하나를 꺼내옴
+        int currentNode = queue[front++];  // 큐에서 노드를 빼내고 front를 증가시킴
+        printf("%d -> ", currentNode);  // 방문한 노드를 출력
+
+        // 인접한 노드들을 오름차순으로 정렬
+        AdjListNode adjacentNode = G1->Adj[currentNode];  // 현재 노드의 인접 노드를 가져옴
+        AdjListNode prev = NULL;  // 이전 노드를 초기화
+        while (adjacentNode) {
+            AdjListNode next = adjacentNode->Next;  // 다음 인접 노드를 저장
+            if (prev == NULL) {
+                prev = adjacentNode;  // prev가 NULL인 경우, 첫 번째 인접 노드를 prev로 설정
+            } else if (adjacentNode->NodeNum < prev->NodeNum) {
+                // 노드들을 교환하여 오름차순으로 정렬
+                int temp = prev->NodeNum;
+                prev->NodeNum = adjacentNode->NodeNum;
+                adjacentNode->NodeNum = temp;
+            }
+            adjacentNode = next;  // 다음 인접 노드로 이동
+        }
+
+        // 정렬된 인접 노드들을 순회
+        adjacentNode = G1->Adj[currentNode];
+        while (adjacentNode) {
+            if (visited[adjacentNode->NodeNum] == 0) {
+                // 인접한 노드를 큐에 넣고 방문 표시
+                queue[rear++] = adjacentNode->NodeNum;
+                visited[adjacentNode->NodeNum] = 1;
+            }
+            adjacentNode = adjacentNode->Next;  // 다음 인접 노드
+        }
     }
-    adjacentNode = adjacentNode->Next;
-}
-}
 
 printf("NULL\n");
 
@@ -242,7 +242,8 @@ free(queue);
 // ! 메인함수
 int main() {
 
-    //! 그래프 생성
+    //! 방향 그래프 생성
+    printf("\n===============\n  방향 그래프\n===============\n \n");
     Graph G1;
     G1 = CreateGraph(10); // 노드 9개짜리 무방향 그래프 생성
 
@@ -288,6 +289,31 @@ int main() {
     BFS(G1, 5);
     //5 -> 2 -> 7 -> 1 -> 8 -> 9 -> 4 -> 6 -> 3 -> NULL
     //5 2 7 1 8 9 4 6 3
+
+    //! 무방향 그래프 생성
+    printf("\n===============\n 무방향 그래프\n===============\n \n");
+    Graph G2;
+    G2 = CreateGraph(10); // 노드 9개짜리 무방향 그래프 생성
+
+    //! 엣지 생성
+    // 방향 엣지로 하나하나 추가
+    AddEdge_Undirected(G2, 1, 2);
+    AddEdge_Undirected(G2, 1, 4);
+    AddEdge_Undirected(G2, 1, 6);
+    AddEdge_Undirected(G2, 2, 5);
+    AddEdge_Undirected(G2, 2, 8);
+    AddEdge_Undirected(G2, 3, 4);
+    AddEdge_Undirected(G2, 5, 7);
+    AddEdge_Undirected(G2, 6, 8);
+    AddEdge_Undirected(G2, 7, 9);
+    AddEdge_Undirected(G2, 8, 9);
+    PrintGraph(G2);
+    //! DFS
+    DFS(G2, 5);
+    //5 -> 2 -> 1 -> 4 -> 3 -> 6 -> 8 -> 9 -> 7 -> NULL
+    //! BFS
+    BFS(G2, 5);
+    //5 -> 2 -> 7 -> 1 -> 8 -> 9 -> 4 -> 6 -> 3 -> NULL
 
     return 0;
 }
